@@ -108,11 +108,10 @@ class ComplaintController extends Controller
 
         return response()->json(['message' => 'تم تحديث حالة الشكوى بنجاح'], 200);
     }
-
-    // عرض الشكاوى مع Caching
     public function allComplaints()
     {
         $userId = auth()->id();
+
         $complaints = Cache::remember("user_complaints_{$userId}", 60, function () use ($userId) {
             return Complaint::where('user_id', $userId)
                 ->with(['attachments', 'logs'])
@@ -121,4 +120,5 @@ class ComplaintController extends Controller
 
         return response()->json($complaints, 200);
     }
+
 }
